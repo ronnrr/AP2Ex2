@@ -1,10 +1,10 @@
-//imports modules
+// imports modules
 const express = require('express');
 const fileUpload = require('express-fileupload');
 // const model = require('../Model/SearchInFile')
 const app = express();
 
-//define app uses
+// define app uses
 app.use(express.urlencoded({
     extended: false
 }));
@@ -16,18 +16,23 @@ app.get('/', (req, res) => {
     res.sendFile('./index.html');
 });
 
+
 app.post('/check', (req, res) => {
     console.log("connection to server at " + Date());
     if (req.files) {
-        let file = req.files.file.data.toString();
+        let file = req.files.file1.data.toString();
         res.write(file);
     }
     // res.send(req.body);
 });
 
+app.post('/', (req, res) => {
+    // here we should check and return json
+});
 
-app.listen(8080, ()=>console.log("server started at 8080"))
-// var http = require('http');
+
+app.listen(8080, () => console.log("server started at 8080"))
+    // var http = require('http');
 
 // http.createServer(function (req, res) {
 //   res.writeHead(200, {'Content-Type': 'text/html'});
