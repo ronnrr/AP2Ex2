@@ -46,10 +46,18 @@ class SimpleAnomalyDetector {
             vals.push(ts.getAttributeData(atts[i]));
         }
         for (i = 0; i < atts.length; i++) {
+            for (j = 0; j < len; j++) {
+                vals[i][j] = Number(vals[i][j]);
+            }
+        }
+        for (i = 0; i < atts.length; i++) {
+            vals[i] = vals[i].slice(1, vals[i].length);
+        }
+        for (i = 0; i < atts.length; i++) {
             var f1 = atts[i];
             var max = 0;
             var jmax = 0;
-            for (j = i + 1; j < atts.length(); j++) {
+            for (j = i + 1; j < atts.length; j++) {
                 var p = Math.abs(pearson(vals[i], vals[j], len));
                 if (p > max) {
                     max = p;
@@ -57,45 +65,50 @@ class SimpleAnomalyDetector {
                 }
             }
             var f2 = atts[jmax];
-            var ps = toPoints(ts.getAttributeData(f1), ts.getAttributeData(f2));
+            var ps = this.toPoints(ts.getAttributeData(f1), ts.getAttributeData(f2));
 
-            learnHelper(ts, max, f1, f2, ps);
+            this.learnHelper(ts, max, f1, f2, ps);
         }
     }
 
     learnHelper(ts, p, f1, f2, ps) {
         if (p > this.threshold) {
             var len = ts.getRowSize();
-            var c = new correlatedFeatures(f1, f2, p, linear_reg(ps, len), findThreshold(ps, len, linear_reg(ps, len)) * 1.1, new Point(0, 0));
+            var c = new correlatedFeatures(f1, f2, p, linear_reg(ps, len), this.findThreshold(ps, len, linear_reg(ps, len)) * 1.1, new Point(0, 0));
             this.cf.push(c);
         }
     }
 
     detect(ts) {
         var v = [];
-        for (const val in this.cf) {
-            var x = ts.getAttributeData(val.feature1);
-            var y = ts.getAttributeData(val.feature2);
-            var i = 0;
-            for (i = 0; i < x.length; i++) {
-                if (isAnomalous(x[i], y[i], val)) {
-                    var d = val.feature1 + "-" + val.feature2;
+        var i = 0;
+        for (i = 0; i < this.cf.length; i++) {
+            var x = ts.getAttributeData(this.cf[i].feature1);
+            var y = ts.getAttributeData(this.cf[i].feature2);
+            var j = 0;
+            for (j = 0; j < x.length; j++) {
+                if (this.isAnomalous(x[j], y[j], this.cf[i])) {
+                    var d = this.cf[i].feature1 + "-" + this.cf[i].feature2;
                     v.push([d, i + 1]);
+                    // v.push(x[j], y[j]);
                 }
             }
         }
         return v;
     }
+
+    isAnomalous(x, y, c) {
+        return (Math.abs(y - c.lin_reg.f(x)) > c.threshold);
+    }
 }
 
 class TimeSeries {
-    // constructor(CSVfileName) {
-    constructor(data) {
+    constructor(string) {
         const fs = require('fs');
         this.atts = [];
         this.ts = {};
         try {
-            // const data = fs.readFileSync(CSVfileName, 'utf8');
+            const data = string;
             var temp = data.split("\n");
             var secondaryTemp = temp[0].split(",");
             secondaryTemp[secondaryTemp.length - 1] = secondaryTemp[secondaryTemp.length - 1].substr(0, secondaryTemp[secondaryTemp.length - 1].length - 1);
@@ -115,7 +128,6 @@ class TimeSeries {
                     (this.ts[this.atts[j]]).push(secTemp[j]);
                 }
             }
-            console.log(this.ts);
         } catch (err) {
             console.error(err);
             return;
@@ -124,11 +136,11 @@ class TimeSeries {
     }
 
     getAttributeData(attribute) {
-        return ts[attribute];
+        return this.ts[attribute];
     }
 
     getAttributes() {
-        return atts;
+        return this.atts;
     }
 
     getRowSize() {
@@ -154,10 +166,12 @@ class Point {
 }
 
 function avg(x, size) {
-    var i = 0;
     var sum = 0;
+    var i = 0;
     for (i = 0; i < size; i++) {
-        sum += x[i];
+        if (isNaN(x[i]) == false) {
+            sum = Number(sum + parseFloat(x[i]));
+        }
     }
     return sum / size;
 }
@@ -167,7 +181,9 @@ function variability(x, size) {
     var av = avg(x, size);
     var sum = 0;
     for (i = 0; i < size; i++) {
-        sum += x[i] * x[i];
+        if (isNaN(x[i]) == false) {
+            sum += parseFloat(x[i]) * parseFloat(x[i]);
+        }
     }
     return sum / size - av * av;
 }
@@ -175,8 +191,11 @@ function variability(x, size) {
 function cov(x, y, size) {
     var sum = 0;
     var i = 0;
+    sum = Number(sum);
     for (i = 0; i < size; i++) {
-        sum += x[i] * y[i];
+        if (isNaN(x[i]) == false && isNaN(y[i]) == false) {
+            sum += (parseFloat(x[i]) * parseFloat(y[i]));
+        }
     }
     sum /= size;
     return sum - avg(x, size) * avg(y, size);
@@ -196,7 +215,7 @@ function linear_reg(points, size) {
     }
     var a = cov(x, y, size) / variability(x, size);
     var b = avg(y, size) - a * (avg(x, size));
-    return Line(a, b)
+    return new Line(a, b)
 }
 
 function dev(p, points, size) {

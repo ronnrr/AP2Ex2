@@ -22,23 +22,21 @@ app.get('/', (req, res) => {
 app.post('/check', (req, res) => {
     console.log("connection to server at " + Date());
     if (req.files) {
-        console.log(req.files);
+        // console.log(req.files);
 
+        /* this is the file without anomalies. */
         let file1 = req.files.file1.data.toString();
+        /* this is the file we should check. */
         let file2 = req.files.file2.data.toString();
 
         var series1 = new model.TimeSeries(file1);
         var series2 = new model.TimeSeries(file2);
         var detector = new model.SimpleAnomalyDetector();
 
-        detector.learnNormal(series1.getAttributes());
-        var annomaly = detector.detect(series2.getAttributes());
+        detector.learnNormal(series1);
+        var anomaly = detector.detect(series2);
 
-        res.write(annomaly);
-        /* this is the file without anomalies. */
-        /* this is the file we should check. */
-
-
+        res.write(anomaly.toString());
     }
 });
 
