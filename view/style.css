@@ -39,6 +39,14 @@
     border-color: darkgray;
 }
 
+.mid {
+    text-align: center;
+    background-color: gainsboro;
+    border-radius: 10px;
+    border: 2px solid;
+    border-color: darkgray;
+}
+
 .selectbox {
     width: 90%;
     margin-left: 5%;

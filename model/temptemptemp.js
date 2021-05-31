@@ -90,6 +90,7 @@ class SimpleAnomalyDetector {
                 if (this.isAnomalous(x[j], y[j], this.cf[i])) {
                     var d = this.cf[i].feature1 + "-" + this.cf[i].feature2;
                     v.push([d, i + 1]);
+                    // console.log("new anomaly: " + d.toString() + ", " + (i + 1));
                     // v.push(x[j], y[j]);
                 }
             }
