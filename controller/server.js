@@ -13,7 +13,7 @@ noAnomaly += "</td></tr></table>";
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const app = express();
-const model = require('../model/temptemptemp');
+const model = require('../model/algo');
 
 // define app uses
 app.use(express.urlencoded({
@@ -47,10 +47,10 @@ app.post('/check', (req, res) => {
             var anomaly;
 
             if (algo == "hybrid") { //hybrid
-                detector.learnNormal(series1);
+                detector.learnNormal(series1, true);
                 anomaly = detector.detect(series2);
             } else { // regression 
-                detector.learnNormal(series1);
+                detector.learnNormal(series1, false);
                 anomaly = detector.detect(series2);
             }
 
@@ -66,14 +66,11 @@ app.post('/check', (req, res) => {
     }
 });
 
-
 app.post('/', (req, res) => {
     // here we should check and return json
 });
 
-
 app.listen(8080, () => console.log("server started at 8080"));
-
 
 function buildTable(anomaly) {
     var str = "<table border='1' width='100%'>";
