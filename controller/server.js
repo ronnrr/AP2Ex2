@@ -67,11 +67,15 @@ app.post('/check', (req, res) => {
 });
 
 app.post('/', (req, res) => {
-    // here we should check and return json
+    console.log("connection to server at " + Date());
+    console.log(req.body);
+
+    res.write(buildJson(anomaly));
 });
 
 app.listen(8080, () => console.log("server started at 8080"));
 
+// this function get an array and return html table
 function buildTable(anomaly) {
     var str = "<table border='1' width='100%'>";
     str += "<th width='50%'>Property:</th>";
@@ -83,5 +87,17 @@ function buildTable(anomaly) {
         str += "</tr>"
     });
     str += "</table>"
+    return str;
+}
+
+// this function get an array and return json string
+function buildJson(anomaly) {
+    var str = '{\n "anomalies": [';
+    anomaly.forEach(element => {
+        str += '\n  {\n   "Property": "' + element[0].toString() + '",\n';
+        str += '   "Value": "' + element[1].toString() + '"\n  },';
+    });
+    str = str.substring(0, str.length - 1);
+    str += '\n ]\n}';
     return str;
 }
