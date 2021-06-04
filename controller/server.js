@@ -38,6 +38,11 @@ app.post('/check', (req, res) => {
         if (req.body.Algorithm == "hybrid")
             isHybrid = true;
 
+        if (!req.files.file1.name.toString().endsWith(".csv") || !req.files.file2.name.toString().endsWith(".csv")) {
+            res.write(errorMessage);
+            return;
+        }
+
         /* this is the file without anomalies. */
         let file1 = req.files.file1.data.toString();
         /* this is the file we should check. */
@@ -103,7 +108,7 @@ function detect(file1, file2, isHybrid) {
 function buildTable(anomaly) {
     var str = "<table border='1' width='100%'>";
     str += "<th width='50%'>Property:</th>";
-    str += "<th width='50%'>Value:</th>";
+    str += "<th width='50%'>Lines:</th>";
     for (var key in anomaly) {
         str += "<tr>"
         str += "<td>" + key + "</td>";
