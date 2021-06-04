@@ -9,7 +9,9 @@ class correlatedFeatures {
         this.radius = radius
     }
 }
-
+var dic = {};
+var dicts = {};
+var counter = 0;
 class SimpleAnomalyDetector {
     constructor() {
         this.threshold = 0.9;
@@ -73,7 +75,7 @@ class SimpleAnomalyDetector {
             var len = ts.getRowSize();
             var c = new correlatedFeatures(f1, f2, p, linear_reg(ps, len), this.findThreshold(ps, len, linear_reg(ps, len)) * 1.1, new Point(0, 0), 0);
             this.cf.push(c);
-        } else if (isHybrid && p > 0.5) {
+        } else if (isHybrid && p > 0.5 && false) {
             ps = ps.slice(1, ps.length);
             var circle = findMinCircle(ps, ts.getRowSize());
             var c = new correlatedFeatures(f1, f2, p, null, null, circle.center, circle.radius * 1.1);
@@ -81,9 +83,7 @@ class SimpleAnomalyDetector {
         }
 
     }
-
     detect(ts) {
-        console.log(this.cf);
         var v = [];
         var i = 0;
         for (i = 0; i < this.cf.length; i++) {
@@ -93,8 +93,13 @@ class SimpleAnomalyDetector {
             for (j = 0; j < ts.getRowSize(); j++) {
                 if (this.cf[i].radius == 0 && this.isAnomalous(x[j], y[j], this.cf[i])) {
                     var d = this.cf[i].feature1 + "-" + this.cf[i].feature2;
-                    v.push([d, j + 1]);
-                } else if (this.cf[i].radius != 0) {
+                    v.push([d, j]);
+                    if (!(d in Object.keys(dicts))) {
+                        counter += 1;
+                        dic[j] = counter;
+                    }
+                    dicts[counter] += d;
+                } else if (this.cf[i].radius != 0 && false) {
                     var point = new Point(x[j], y[j]);
                     if (dist(point, this.cf[i].center) > this.cf[i].radius) {
                         var d = this.cf[i].feature1 + "-" + this.cf[i].feature2;
@@ -295,7 +300,6 @@ function trivial(p) {
 }
 
 function welzl(p, r, n) {
-    console.log(p.slice(0, n));
     for (i = 0; i < n; i++) {
         if (p[i] == undefined) {
             p.splice(i, 1);
@@ -311,13 +315,7 @@ function welzl(p, r, n) {
     var ps = new Point(p[i].x, p[i].y);
     p[i] = p[n - 1];
     p[n - 1] = ps;
-    if (n == 0) {
-        console.log("asdasd");
-    }
     var c = welzl(p, r, n - 1);
-    if (n == 0) {
-        console.log("BBBBBBBBBBBBBB");
-    }
     if (dist(ps, c.center) <= c.radius) {
         return c;
     }
