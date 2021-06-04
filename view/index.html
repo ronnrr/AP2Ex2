@@ -15,7 +15,7 @@
     <form name="webForm" action="/check" method="post" enctype="multipart/form-data" target="result">
         <table width="100%" height="70%">
             <tr>
-                <td width="30%">
+                <td width="33%">
                     <div class="loadFile">
                         <p>File 1 (without anomalies):
                             </br>
@@ -23,7 +23,7 @@
                         </p>
                     </div>
                 </td>
-                <td width="30%">
+                <td width="33%">
                     <div class="loadFile">
                         <p>File 2 (to check for anomalies):
                             </br>
@@ -31,18 +31,17 @@
                         </p>
                     </div>
                 </td>
-                <td width="40%" class="mid">
+                <td width="34%" class="mid">
                     <table width="100%">
                         <tr>
                             <td width="70%">
                                 <select name="Algorithm" class="selectbox">
-                                    <!-- <option name="choose">-- choose --</option> -->
                                     <option name="hybrid">hybrid</option>
                                     <option name="regression">regression</option>
                                 </select>
                             </td>
                             <td width="30%">
-                                <input type="submit" value="detect" class="leg">
+                                <input type="submit" value="DETECT" class="btn">
                             </td>
                         </tr>
                     </table>
@@ -50,7 +49,9 @@
             </tr>
 
             <tr height="90%">
-                <td colspan="4" class="frame" style="background-color: gainsboro;" name="place">
+                <td colspan="4" class="frame" name="place">
+                    </br>
+                    <h2 style="color: #cccfff; font-family: Verdana; text-decoration: underline;">Results</h2>
                     <iframe id="frameId" name="result" width="97%" height="500"></iframe>
                 </td>
             </tr>

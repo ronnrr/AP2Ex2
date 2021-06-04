@@ -1,8 +1,13 @@
+body {
+    /* background-color: #ffffcc; */
+    background-color: #e6faff;
+}
+
 .topic {
     text-align: center;
     font-size: 70px;
     font-family: Algerian, narkisim;
-    color: gray;
+    color: #cccfff;
     text-shadow: 5px 5px darkgray;
 }
 
@@ -13,41 +18,49 @@
 }
 
 .loadFile {
+    height: 100%;
     width: 100%;
-    font-family: narkisim;
+    text-align: center;
     font-size: 30px;
-    background-color: gainsboro;
+    font-family: narkisim;
+    /* background-color: #ccffff; */
+    background-color: #99ebff;
     border: 2px solid;
     border-radius: 10px;
-    border-color: darkgray;
+    /* border-color: #ffffcc; */
+    border-color: #e6faff;
 }
 
 .frame {
+    /* background-color: #ffffcc; */
+    background-color: #e6faff;
     text-align: center;
     border-radius: 10px;
     border: 2px solid;
-    border-color: darkgray;
-    background-color: gainsboro;
+    border-color: #99ebff;
 }
 
-.middle {
-    width: 100%;
-    text-align: center;
-    background-color: gainsboro;
-    border-radius: 10px;
-    border: 2px solid;
-    border-color: darkgray;
+#frameId {
+    border: none;
 }
 
 .mid {
     text-align: center;
-    background-color: gainsboro;
+    background-color: #99ebff;
     border-radius: 10px;
     border: 2px solid;
-    border-color: darkgray;
+    /* border-color: #ffffcc; */
+    border-color: #e6faff;
 }
 
 .selectbox {
+    text-align: center;
+    /* background-color: #ccffff; */
+    background-color: #cccfff;
+    border-color: #cccfff;
+    border-radius: 3px;
+    font-family: calibri;
+    color: white;
     width: 90%;
     margin-left: 5%;
     margin-right: 5%;
@@ -55,31 +68,20 @@
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 
-.leg {
-    text-align: center;
-    font-size: 25px;
-    /* font-family:'Comic Sans', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; */
-}
-
-.leg input {
-    text-align: center;
-    font-size: 35px;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-}
-
 .btn {
-    margin-top: 35%;
-    margin-left: 35%;
-    margin-right: 35%;
-    width: 40%;
-    /* height: 15%; */
-    color: white;
-    font-family: serif;
-    font-size: 25px;
-    border-style: groove;
-    border-radius: 15%;
-    background-color: blue;
     text-align: center;
+    font-size: 25px;
+    background-color: #99ebff;
+    border-color: #cccfff;
+    border-radius: 3px;
+    font-family: calibri;
+    /* color: #cccfff; */
+    color: white;
+}
+
+.btn:hover {
+    background-color: #cccfff;
+    color: white;
 }
 
 .end {

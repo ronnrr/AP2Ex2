@@ -75,6 +75,7 @@ app.post('/', (req, res) => {
         } else {
             res.json(buildJson(anomaly));
         }
+        res.end();
     }
 });
 
@@ -98,6 +99,7 @@ function detect(file1, file2, isHybrid) {
         return -1;
     }
 }
+
 // this function get an array and return html table
 function buildTable(anomaly) {
     var str = "<table border='1' width='100%'>";
