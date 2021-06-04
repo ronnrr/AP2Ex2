@@ -103,7 +103,7 @@ function detect(file1, file2, isHybrid) {
 function buildTable(anomaly) {
     var str = "<table border='1' width='100%'>";
     str += "<th width='50%'>Property:</th>";
-    str += "<th width='50%'>Value:</th>";
+    str += "<th width='50%'>Lines:</th>";
     for (var key in anomaly) {
         str += "<tr>"
         str += "<td>" + key + "</td>";
