@@ -49,10 +49,10 @@ app.post('/check', (req, res) => {
         } else if (anomaly == -1) {
             res.write(errorMessage);
         } else {
-            // res.write(buildTable(anomaly));
             res.write(buildTable(anomaly));
         }
     }
+    res.end();
 });
 
 app.post('/', (req, res) => {
@@ -75,7 +75,6 @@ app.post('/', (req, res) => {
         } else {
             res.json(buildJson(anomaly));
         }
-        res.end();
     }
 });
 
@@ -90,7 +89,7 @@ function detect(file1, file2, isHybrid) {
         detector.learnNormal(series1, isHybrid);
         anomaly = detector.detect(series2);
 
-        if (anomaly.length == 0)
+        if (Object.keys(anomaly).length == 0)
             return 0;
 
         return anomaly;
@@ -105,12 +104,12 @@ function buildTable(anomaly) {
     var str = "<table border='1' width='100%'>";
     str += "<th width='50%'>Property:</th>";
     str += "<th width='50%'>Value:</th>";
-    anomaly.forEach(element => {
+    for (var key in anomaly) {
         str += "<tr>"
-        str += "<td>" + element[0].toString() + "</td>";
-        str += "<td>" + element[1].toString() + "</td>";
+        str += "<td>" + key + "</td>";
+        str += "<td>" + anomaly[key] + "</td>";
         str += "</tr>"
-    });
+    }
     str += "</table>"
     return str;
 }
@@ -118,8 +117,8 @@ function buildTable(anomaly) {
 // this function get an array and return json string
 function buildJson(anomaly) {
     var anomalies = { "anomalies": {} };
-    anomaly.forEach(element => {
-        anomalies.anomalies[element[0].toString()] = element[1].toString();
-    });
+    for (var key in anomaly) {
+        anomalies.anomalies[key] = anomaly[key];
+    }
     return anomalies;
 }

@@ -9,9 +9,6 @@ class correlatedFeatures {
         this.radius = radius
     }
 }
-var dic = {};
-var dicts = {};
-var counter = 0;
 class SimpleAnomalyDetector {
     constructor() {
         this.threshold = 0.9;
@@ -85,6 +82,7 @@ class SimpleAnomalyDetector {
     }
     detect(ts) {
         var v = [];
+        var dicts = {};
         var i = 0;
         for (i = 0; i < this.cf.length; i++) {
             var x = ts.getAttributeData(this.cf[i].feature1);
@@ -94,11 +92,10 @@ class SimpleAnomalyDetector {
                 if (this.cf[i].radius == 0 && this.isAnomalous(x[j], y[j], this.cf[i])) {
                     var d = this.cf[i].feature1 + "-" + this.cf[i].feature2;
                     v.push([d, j]);
-                    if (!(d in Object.keys(dicts))) {
-                        counter += 1;
-                        dic[j] = counter;
+                    if (dicts[d] == undefined) {
+                        dicts[d] = [];
                     }
-                    dicts[counter] += d;
+                    dicts[d].push(j);
                 } else if (this.cf[i].radius != 0 && false) {
                     var point = new Point(x[j], y[j]);
                     if (dist(point, this.cf[i].center) > this.cf[i].radius) {
@@ -108,7 +105,15 @@ class SimpleAnomalyDetector {
                 }
             }
         }
-        return v;
+        var mid = Object.keys(dicts)
+        for (i = 0; i < mid.length; i++) {
+            if (dicts[mid[i]].length - 1 != 0) {
+                dicts[mid[i]] = dicts[mid[i]][0] + " - " + dicts[mid[i]][dicts[mid[i]].length - 1];
+            } else {
+                dicts[mid[i]] = dicts[mid[i]][0];
+            }
+        }
+        return dicts;
     }
 
     isAnomalous(x, y, c) {
