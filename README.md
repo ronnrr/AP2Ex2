@@ -36,4 +36,4 @@ Quite simple I believe (hopefully I didn't forget anything)
 A draw.io file is inside the git repository, which contains all relevant information and graphs.
 In addition, we added a picture of the uml in case you don't feel like opening draw.io.
 ###### Part 6 - A video of the project.
-Link to said video is: 
+Link to said video is: https://youtu.be/EguSYT05kFQ
